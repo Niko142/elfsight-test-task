@@ -1,20 +1,19 @@
 import styled from 'styled-components';
+import { memo, useCallback } from 'react';
 import { ReactComponent as Male } from '../assets/genders/male.svg';
 import { ReactComponent as Female } from '../assets/genders/female.svg';
 import { ReactComponent as Genderless } from '../assets/genders/genderless.svg';
 
 // TODO: Refactor the Card component
-export function Card({
-  status,
-  name,
-  species,
-  type,
-  gender,
-  image,
-  onClickHandler
-}) {
+export const Card = memo(function Card({ character = {}, onClickHandler }) {
+  const { image, name, gender, status, species, type } = character;
+
+  const handleClick = useCallback(() => {
+    onClickHandler(character);
+  }, [character, onClickHandler]);
+
   return (
-    <StyledCard onClick={onClickHandler}>
+    <StyledCard onClick={handleClick}>
       <CardImg src={image} alt={name} />
 
       <CardInfo>
@@ -24,9 +23,9 @@ export function Card({
       </CardInfo>
     </StyledCard>
   );
-}
+});
 
-export function CardTitle({ name, gender, className }) {
+export const CardTitle = ({ name, gender, className }) => {
   const Icon = (() => {
     if (gender === 'Male') {
       return <Male width={20} height={20} fill="#33b3c8" title="Male" />;
@@ -52,9 +51,9 @@ export function CardTitle({ name, gender, className }) {
       <IconContainer>{Icon}</IconContainer>
     </CardTitleContainer>
   );
-}
+};
 
-export function CardStatus({ status, species, type, className }) {
+export const CardStatus = ({ status, species, type, className }) => {
   return (
     <CardStatusContainer className={className}>
       <StyledCardStatus status={status}>{status}</StyledCardStatus>
@@ -63,7 +62,7 @@ export function CardStatus({ status, species, type, className }) {
       {type && <CardType>{type}</CardType>}
     </CardStatusContainer>
   );
-}
+};
 
 const CardStatusContainer = styled.div`
   display: flex;
