@@ -10,9 +10,7 @@ export function PopupEpisodes({ episodes }) {
   const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
-    if (!episodes?.length) {
-      return;
-    }
+    if (!episodes?.length) return;
 
     setIsFetching(true);
 

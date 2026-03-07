@@ -1,49 +1,51 @@
+import { useCallback, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { PopupEpisodes } from './PopupEpisodes';
 import { PopupHeader } from './PopupHeader';
 import { PopupInfo } from './PopupInfo';
-import { useCallback } from 'react';
 
 export function Popup({ settings: { visible, content = {} }, setSettings }) {
-  const {
-    name,
-    gender,
-    image,
-    status,
-    species,
-    type,
-    origin,
-    location,
-    episode: episodes
-  } = content;
+  const { origin, location, episode: episodes } = content;
+
+  const closePopup = useCallback(() => {
+    setSettings((prevState) => ({
+      ...prevState,
+      visible: false
+    }));
+  }, [setSettings]);
 
   const togglePopup = useCallback(
     (e) => {
       if (e.currentTarget !== e.target) {
         return;
       }
-
-      setSettings((prevState) => ({
-        ...prevState,
-        visible: !prevState.visible
-      }));
+      closePopup();
     },
-    [setSettings]
+    [closePopup]
   );
 
+  useEffect(() => {
+    if (!visible) return;
+
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') closePopup();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [visible, closePopup]);
+
   return (
-    <PopupContainer visible={visible}>
+    <PopupContainer visible={visible} onClick={togglePopup}>
       <StyledPopup>
         <CloseIcon onClick={togglePopup} />
 
-        <PopupHeader
-          name={name}
-          gender={gender}
-          image={image}
-          status={status}
-          species={species}
-          type={type}
-        />
+        <PopupHeader character={content} />
 
         <PopupInfo origin={origin} location={location} />
 

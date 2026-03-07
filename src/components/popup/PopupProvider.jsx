@@ -15,18 +15,16 @@ export function PopupProvider({ children }) {
     setIsFetching(true);
     setIsError(false);
 
-    axios
-      .get(url)
-      .then(({ data }) => {
-        setIsFetching(false);
-        setCharacters(data.results);
-        setInfo(data.info);
-      })
-      .catch((e) => {
-        setIsFetching(false);
-        setIsError(true);
-        console.error(e);
-      });
+    try {
+      const { data } = await axios.get(url);
+      setIsFetching(false);
+      setCharacters(data.results);
+      setInfo(data.info);
+    } catch (e) {
+      setIsFetching(false);
+      setIsError(true);
+      console.error(e);
+    }
   };
 
   useEffect(() => {
