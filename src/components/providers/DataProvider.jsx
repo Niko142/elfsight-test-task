@@ -10,6 +10,8 @@ import {
 
 const API_URL = 'https://rickandmortyapi.com/api/character/';
 
+const DataContext = createContext({});
+
 export function DataProvider({ children }) {
   const [activePage, setActivePage] = useState(0);
   const [characters, setCharacters] = useState([]);
@@ -71,7 +73,5 @@ export function DataProvider({ children }) {
     <DataContext.Provider value={dataValue}>{children}</DataContext.Provider>
   );
 }
-
-const DataContext = createContext({});
 
 export const useData = () => useContext(DataContext);

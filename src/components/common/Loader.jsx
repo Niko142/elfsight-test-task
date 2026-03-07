@@ -1,5 +1,5 @@
 import styled, { keyframes } from 'styled-components';
-import portal from '../../assets/green-portal.png';
+import portal from '@assets/green-portal.png';
 
 const spin = keyframes`
   from {
