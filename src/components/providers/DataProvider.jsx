@@ -54,6 +54,21 @@ export function DataProvider({ children }) {
     };
   }, [apiURL, fetchData]);
 
+  const applyFilters = useCallback((options) => {
+    const url = new URL(API_URL);
+    Object.entries(options).forEach(([key, value]) => {
+      if (value) url.searchParams.set(key, value);
+    });
+
+    setActivePage(0);
+    setApiURL(url.toString());
+  }, []);
+
+  const resetFilters = useCallback(() => {
+    setActivePage(0);
+    setApiURL(API_URL);
+  }, []);
+
   const dataValue = useMemo(
     () => ({
       activePage,
@@ -64,9 +79,21 @@ export function DataProvider({ children }) {
       fetchData,
       isFetching,
       isError,
-      info
+      info,
+      applyFilters,
+      resetFilters
     }),
-    [activePage, apiURL, characters, isFetching, isError, info, fetchData]
+    [
+      activePage,
+      apiURL,
+      characters,
+      isFetching,
+      isError,
+      info,
+      fetchData,
+      applyFilters,
+      resetFilters
+    ]
   );
 
   return (
