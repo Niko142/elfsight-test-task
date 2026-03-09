@@ -16,7 +16,11 @@
       "warn",
       {
         "unusedExports": true,
-        "ignoreExports": ["**/*.constants.js", "**/index.js"]
+        "ignoreExports": [
+          "**/*.constants.js",
+          "**/*.variants.js",
+          "**/index.js"
+        ]
       }
     ],
     "react-hooks/rules-of-hooks": "error",

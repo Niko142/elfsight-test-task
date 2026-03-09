@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import { ChevronUp, ChevronDown, X } from 'lucide-react';
 import { useState, useRef, useEffect, useCallback } from 'react';
 
 export const FilterSelect = ({ name, value, onChange, options }) => {
@@ -29,15 +29,30 @@ export const FilterSelect = ({ name, value, onChange, options }) => {
     [name, onChange]
   );
 
+  const handleClearValue = useCallback(
+    (e) => {
+      e.stopPropagation();
+      onChange({ target: { name, value: '' } });
+    },
+    [name, onChange]
+  );
+
   return (
     <SelectContainer ref={selectRef}>
       <SelectTrigger $isOpen={isOpen} $isEmpty={!value} onClick={handleToggle}>
         <DefaultSelectValue>{value || 'Select'}</DefaultSelectValue>
-        {isOpen ? (
-          <ChevronUp size={16} color="#ffffff" />
-        ) : (
-          <ChevronDown size={16} color="#b2b2b2" />
-        )}
+
+        <SelectIcon>
+          {value ? (
+            <ClearButton onClick={handleClearValue}>
+              <X size={18} strokeWidth={2} />
+            </ClearButton>
+          ) : isOpen ? (
+            <ChevronUp size={18} strokeWidth={2} color="#ffffff" />
+          ) : (
+            <ChevronDown size={18} strokeWidth={2} color="#b2b2b2" />
+          )}
+        </SelectIcon>
       </SelectTrigger>
 
       {isOpen && (
@@ -64,6 +79,23 @@ const SelectContainer = styled.div`
 `;
 
 const DefaultSelectValue = styled.span``;
+
+const SelectIcon = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const ClearButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f5f5f5;
+  transition: color 0.2s ease-in-out;
+
+  &:hover {
+    color: #83bf46;
+  }
+`;
 
 const SelectTrigger = styled.button`
   box-sizing: border-box;
