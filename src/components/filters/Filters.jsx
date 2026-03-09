@@ -1,14 +1,15 @@
 import styled from 'styled-components';
-import { FilterInput } from './FilterInput';
 import { useCallback, useState } from 'react';
+import { BUTTON_VARIANTS } from './constants/button.variants';
 import {
   DEFAULT_FILTERS,
   GENDER_OPTIONS,
   SPECIES_OPTIONS,
   STATUS_OPTIONS
-} from './filters.constants';
-import { useData } from '../providers';
+} from './constants/filters.constants';
+import { FilterInput } from './FilterInput';
 import { FilterSelect } from './FilterSelect';
+import { useData } from '../providers';
 
 export const Filters = () => {
   const { applyFilters, resetFilters } = useData();
@@ -67,8 +68,12 @@ export const Filters = () => {
       />
 
       <ButtonMenu>
-        <Button onClick={handleApplyFilters}>Apply</Button>
-        <Button onClick={handleResetFilters}>Reset</Button>
+        <Button $variant="apply" onClick={handleApplyFilters}>
+          Apply
+        </Button>
+        <Button $variant="reset" onClick={handleResetFilters}>
+          Reset
+        </Button>
       </ButtonMenu>
     </FiltersGrid>
   );
@@ -76,20 +81,43 @@ export const Filters = () => {
 
 const FiltersGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 180px);
+  grid-template-rows: repeat(2, 40px);
   gap: 10px;
+
+  @media (max-width: 930px) {
+    grid-template-columns: repeat(3, 150px);
+    gap: 15px;
+  }
+
+  @media (max-width: 530px) {
+    grid-template-columns: 240px;
+    grid-template-rows: 40px;
+  }
 `;
 
 const ButtonMenu = styled.div`
   display: flex;
   gap: 10px;
+
+  @media (max-width: 530px) {
+    flex-direction: column;
+  }
 `;
 
 const Button = styled.button`
-  display: block;
-  border: 1px solid green;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  font-size: 16px;
+  line-height: 1;
   background-color: transparent;
+  border: 1px solid;
   border-radius: 8px;
-  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+
+  ${({ $variant }) => BUTTON_VARIANTS[$variant]}
 `;
